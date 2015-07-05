@@ -61,9 +61,9 @@ bot.on('message', function (msg) {
 
 		UserSounds
 		.find({ name: soundName })
-		.then(function(sounds) {
+		.then(function (sounds) {
 			if (sounds.length > 0) {
-				var sound = sounds[Math.floor(Math.random() * sound.length)];
+				var sound = sounds[Math.floor(Math.random() * sounds.length)];
 				return bot.sendAudio(msg.chat.id, sound.file_id);
 			}
 
