@@ -102,8 +102,8 @@ var handleUserProcess = function(msg) {
 			UserSounds
 			.find({ user_id: msg.from.id})
 			.then(function (sounds) {
-				var msg = sounds.map(function(s) { return s.name + '\n'});
-				return bot.sendMessage(msg.chat.id, msg);
+				var text = sounds.map(function(s) { return s.name + '\n'});
+				return bot.sendMessage(msg.chat.id, text);
 			})
 			return null;
 		}
