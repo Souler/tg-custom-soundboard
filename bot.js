@@ -59,10 +59,12 @@ bot.on('message', function (msg) {
 			soundName = cmd[1];
 
 		UserSounds
-		.findOne({ user_id: msg.from.id, name: soundName})
-		.then(function(sound) {
-			if (sound)
+		.find{ name: soundName })
+		.then(function(sounds) {
+			if (sounds.length > 0) {
+				var sound = sounds[Math.floor(Math.random() * sound.length)];
 				return bot.sendAudio(msg.chat.id, sound.file_id);
+			}
 
 			handleUserProcess(msg);
 		})
@@ -89,9 +91,13 @@ var handleUserProcess = function(msg) {
 
 		if (msg.text && msg.text == '/list') {
 			UserSounds
-			.find({ user_id: msg.from.id})
+			.aggregate(
+				{ $group: 
+					{ _id: 'name', count: { $sum: 1 } } 
+				}
+			)
 			.then(function (sounds) {
-				var text = sounds.map(function(s) { return s.name + '\n'});
+				var text = sounds.map(function(s) { return util.format('%s : %d\n', s._id, s.count)});
 				return bot.sendMessage(msg.chat.id, text);
 			})
 			return null;
