@@ -59,7 +59,7 @@ bot.on('message', function (msg) {
 			soundName = cmd[1];
 
 		UserSounds
-		.find{ name: soundName })
+		.find({ name: soundName })
 		.then(function(sounds) {
 			if (sounds.length > 0) {
 				var sound = sounds[Math.floor(Math.random() * sound.length)];
