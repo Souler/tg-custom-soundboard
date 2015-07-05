@@ -35,7 +35,8 @@ var Messages = {
 			'/list - Shows a list of all your recorded sounds',
 	record_name: 'How do you want to call this sound?\nYou can use a-z and _ in it.',
 	record_audio: 'Now send me the audio. It can be a file or a voice recording.',
-	record_done: 'Done. You have succesfully created a new sound. You can invoke it using "/play %s" or "/%s"'
+	record_done: 'Done. You have succesfully created a new sound. You can invoke it using "/play %s" or "/%s"',
+	list: 'Available sounds: \n'
 }
 
 var States = {
@@ -93,10 +94,12 @@ var handleUserProcess = function(msg) {
 			UserSounds
 			.aggregate(
 				{ $group: 
-					{ _id: 'name', count: { $sum: 1 } } 
+					{ _id: '$name', count: { $sum: 1 } } 
 				},
 				function (err, sounds) {
-					var text = sounds.map(function(s) { return util.format('%s : %d\n', s._id, s.count)});
+					console.log(sounds);
+					var text = Messages.list;
+					text += sounds.map(function(s) { return util.format('%s : (Count: %d)', s._id, s.count)}).join('\n');
 					return bot.sendMessage(msg.chat.id, text);
 			})
 			return null;
