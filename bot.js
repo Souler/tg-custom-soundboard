@@ -35,7 +35,7 @@ var Messages = {
 			'/list - Shows a list of all your recorded sounds',
 	record_name: 'How do you want to call this sound?\nYou can use a-z and _ in it.',
 	record_audio: 'Now send me the audio. It can be a file or a voice recording.',
-	record_done: 'Done. You have succesfully created a new sound. You can invoke it using "/play [name]" or "/[name]"'
+	record_done: 'Done. You have succesfully created a new sound. You can invoke it using "/play %s" or "/%s"'
 }
 
 var States = {
@@ -44,9 +44,6 @@ var States = {
 	record_audio: 'record_audio',
 	record_done: 'record_done'
 };
-
-var newSound = {};
-var status = States.greet;
 
 // Program params
 var bot = new TelegramBot(token, {polling: true});
@@ -72,14 +69,6 @@ bot.on('message', function (msg) {
 	}
 	else
 		handleUserProcess(msg);
-
-
-	/*
-	if (msg.text && msg.text == '/play') {
-		status = States.record_name;
-		return bot.sendMessage(msg.chat.id, Messages.record_name);
-	}
-	*/
 })
 
 var handleUserProcess = function(msg) {
@@ -119,13 +108,12 @@ var handleUserProcess = function(msg) {
 			user_state.arguments.push(msg.text.split(' ')[0].toLowerCase());
 			user_state.save();
 			return user_state;
-			// return bot.sendMessage(msg.chat.id, Messages.record_audio);
 		}
 
 		if (status == States.record_audio && msg.audio) {
-
+			var soundname =  user_state.arguments[0];
 			return UserSounds
-			.findOne({ user_id: msg.from.id, name: user_state.arguments[0], file_id: msg.audio.file_id })
+			.findOne({ user_id: msg.from.id, name: soundname, file_id: msg.audio.file_id })
 			.then(function (soundentry) {
 
 				if (soundentry) {
@@ -133,16 +121,15 @@ var handleUserProcess = function(msg) {
 					return soundentry.save();
 				}
 				else {
-					UserSounds.create({ user_id: msg.from.id, file_id: msg.audio.file_id, name: user_state.arguments[0] })
+					UserSounds.create({ user_id: msg.from.id, file_id: msg.audio.file_id, name: soundname })
 				}
 			})
 			.then(function () {
 				user_state.state = States.record_done;
-				user_state.arguments = [];
+				user_state.arguments = [ soundname ];
 				user_state.save();
 				return user_state;
 			})
-			// return bot.sendMessage(msg.chat.id, util.format(Messages.record_done), newSound.name, newSound.name);
 		}
 
 		user_state.state = States.greet;
@@ -161,9 +148,11 @@ var handleUserProcess = function(msg) {
 			return bot.sendMessage(msg.chat.id, Messages.record_audio);
 
 		if (user_state.state == States.record_done) {
+			var soundname = user_state.arguments[0];
 			user_state.state = States.greet;
+			user_state.arguments = [];
 			user_state.save();
-			return bot.sendMessage(msg.chat.id, Messages.record_done);
+			return bot.sendMessage(msg.chat.id, util.format(Messages.record_done, soundname, soundname));
 		}
 
 		return bot.sendMessage(msg.chat.id, Messages.greet);
