@@ -98,7 +98,7 @@ var handleUserProcess = function(msg) {
 				function (err, sounds) {
 					console.log(sounds);
 					var text = Messages.list;
-					text += sounds.map(function(s) { return util.format('%s : (Count: %d)', s._id, s.count)}).join('\n');
+					text += sounds.map(function(s) { return util.format('/%s : (Count: %d)', s._id, s.count)}).join('\n');
 					return bot.sendMessage(msg.chat.id, text);
 			})
 			return null;
