@@ -94,11 +94,10 @@ var handleUserProcess = function(msg) {
 			.aggregate(
 				{ $group: 
 					{ _id: 'name', count: { $sum: 1 } } 
-				}
-			)
-			.then(function (sounds) {
-				var text = sounds.map(function(s) { return util.format('%s : %d\n', s._id, s.count)});
-				return bot.sendMessage(msg.chat.id, text);
+				},
+				function (err, sounds) {
+					var text = sounds.map(function(s) { return util.format('%s : %d\n', s._id, s.count)});
+					return bot.sendMessage(msg.chat.id, text);
 			})
 			return null;
 		}
