@@ -1,0 +1,16 @@
+{
+  "name": "tg_dark_crom_bot",
+  "version": "0.0.1",
+  "description": "Telegram Bot for Dark Crom Group",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Souler <soulerhyd@gmail.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "request": "~2.58.0",
+    "glob": "~5.0.13",
+    "mongoose": "~4.0.6"
+  }
+}
