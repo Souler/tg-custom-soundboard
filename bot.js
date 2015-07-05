@@ -93,9 +93,8 @@ var handleUserProcess = function(msg) {
 		if (msg.text && msg.text == '/list') {
 			UserSounds
 			.aggregate(
-				{ $group: 
-					{ _id: '$name', count: { $sum: 1 } } 
-				},
+				{ $group: { _id: '$name', count: { $sum: 1 } } },
+				{ $sort: { count: -1 } },
 				function (err, sounds) {
 					console.log(sounds);
 					var text = Messages.list;
