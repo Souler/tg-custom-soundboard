@@ -5,8 +5,10 @@ var glob = require('glob').sync;
 var TelegramBot = require('node-telegram-bot-api');
 
 // Config
-var token = '116758249:AAE2_Ho4qepRP3NmDFSwpIINLXh6Y7Q6e_g';
-var soundsPath = path.join(__dirname, './sounds/');
+var token = process.env.TELEGRAN_API_TOKEN;
+
+if (!token)
+	throw new Error('No TELEGRAM_API_TOKEN enviroment variable.');
 
 // ---------------------
 var mongoose = require('mongoose');
