@@ -5,7 +5,7 @@ var glob = require('glob').sync;
 var TelegramBot = require('node-telegram-bot-api');
 
 // Config
-var token = process.env.TELEGRAN_API_TOKEN;
+var token = process.env.TELEGRAM_API_TOKEN;
 
 if (!token)
 	throw new Error('No TELEGRAM_API_TOKEN enviroment variable.');
